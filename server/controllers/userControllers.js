@@ -144,6 +144,84 @@ class userControllers {
       });
     }
   };
+
+  static userDetails = async (req, res) => {
+    try {
+      const { id } = req.params;
+      if (!id) {
+        return res
+          .status(400)
+          .json({ success: false, message: "id is reduired" });
+      }
+
+      const user = await User.findById(id)
+        .select("-password")
+        .populate("followers")
+        .populate();
+
+      res.status(200).json({ success: false, user: user });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "Error in userDetails fetching",
+        error: error,
+      });
+    }
+  };
+
+  static followUser = async (req, res) => {
+    try {
+      const { id } = req.params;
+      if (!id) {
+        return res
+          .status(400)
+          .json({ success: false, message: "id ie required" });
+      }
+
+      // find existing user
+
+      const userExist = await User.findById(id);
+      if (!userExist) {
+        return res
+          .status(400)
+          .json({ success: false, message: "user not found....." });
+      }
+
+      // unFallow user if already fallowed
+      if (userExist.followers.includes(req.user._id)) {
+        await User.findByIdAndUpdate(
+          userExist._id,
+          {
+            $pull: { followers: req.user._id },
+          },
+          { new: true }
+        );
+
+        return res
+          .status(201)
+          .json({ success: true, message: `Unfallowed ${userExist.userName}` });
+      }
+
+      // fallow the user
+      await User.findByIdAndUpdate(
+        userExist._id,
+        {
+          $push: { followers: req.user._id },
+        },
+        { new: true }
+      );
+
+      res
+        .status(200)
+        .json({ success: true, message: `Fallowed ${userExist.userName}` });
+    } catch (error) {
+      return res.status(500).json({
+        success: "false",
+        message: "Error in follow user",
+        error: error,
+      });
+    }
+  };
 }
 
 export default userControllers;
