@@ -334,19 +334,35 @@ class userControllers {
         });
       }
 
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: "List of user fetch successfull",
-          users: users,
-        });
+      res.status(200).json({
+        success: true,
+        message: "List of user fetch successfull",
+        users: users,
+      });
     } catch (error) {
       console.log("Error in search user", error);
       return res.status(500).json({
         success: false,
         message: "error in user search",
         error: error.message,
+      });
+    }
+  };
+
+  static userLogout = async (req, res) => {
+    try {
+      res.cookie("token", "", {
+        maxAge: Date.now(),
+        httpOnly: true,
+        sameSite: "none",
+        secure: true,
+      });
+      res.status(200).json({ message: "You logged out !" });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "Error in user logout",
+        error: error,
       });
     }
   };

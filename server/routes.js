@@ -10,5 +10,6 @@ router.get("/user/:id", userControllers.userDetails);
 router.put("/user/follow/:id", auth, userControllers.followUser);
 router.put("/update", auth, userControllers.updateProfile);
 router.get("/user/search/:query", auth, userControllers.searchUser);
+router.post("/logout", auth, userControllers.userLogout);
 
 export default router;
