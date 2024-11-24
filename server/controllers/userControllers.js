@@ -312,6 +312,44 @@ class userControllers {
       });
     }
   };
+
+  static searchUser = async (req, res) => {
+    try {
+      const { query } = req.params;
+      if (!query) {
+        return res.status(400).json({ message: "Query is required..." });
+      }
+
+      const users = await User.find({
+        $or: [
+          { userName: { $regex: query, $options: "i" } },
+          { email: { $regex: query, $options: "i" } },
+        ],
+      });
+
+      if (!users) {
+        return res.status(400).json({
+          success: false,
+          message: "User are not found with this info",
+        });
+      }
+
+      res
+        .status(200)
+        .json({
+          success: true,
+          message: "List of user fetch successfull",
+          users: users,
+        });
+    } catch (error) {
+      console.log("Error in search user", error);
+      return res.status(500).json({
+        success: false,
+        message: "error in user search",
+        error: error.message,
+      });
+    }
+  };
 }
 
 export default userControllers;

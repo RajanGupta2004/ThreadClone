@@ -9,5 +9,6 @@ router.post("/login", userControllers.login);
 router.get("/user/:id", userControllers.userDetails);
 router.put("/user/follow/:id", auth, userControllers.followUser);
 router.put("/update", auth, userControllers.updateProfile);
+router.get("/user/search/:query", auth, userControllers.searchUser);
 
 export default router;
