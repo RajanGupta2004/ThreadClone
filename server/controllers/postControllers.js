@@ -3,6 +3,7 @@ import Post from "../models/post.model.js";
 import cloudinary from "../config/cloudinary.js";
 import User from "../models/user.Model.js";
 import { model } from "mongoose";
+import Comment from "../models/comment.Model.js";
 
 class postControllers {
   static addPost = (req, res) => {
@@ -133,15 +134,71 @@ class postControllers {
 
   static deletePost = async (req, res) => {
     try {
+      const { id } = req.params;
+      if (!id) {
+        return res.status(400).json({ message: "post id is required" });
+      }
+
+      // find the post exist or not in database
+      const postExist = await Post.findById(id);
+      if (!postExist) {
+        return res
+          .status(400)
+          .json({ success: false, message: "post does not exist" });
+      }
+
+      // check authorised  user can delete post
+      const userId = req.user._id.toString();
+      const adminId = postExist.admin.toString();
+
+      console.log("userId and post admin", userId, adminId);
+      if (userId != adminId) {
+        return res.status(400).json({
+          success: false,
+          message: "you are not allowed to delete post",
+        });
+      }
+
+      // delete post Image from cloudinary
+      if (postExist.media) {
+        cloudinary.uploader.destroy(postExist.public_id, (err, result) => {
+          console.log(err, result);
+        });
+      }
+
+      // delete comment from that post
+
+      await Comment.deleteMany({ _id: { $in: postExist.comment } });
+
+      // delete all threds repost and replies
+      await User.updateMany(
+        {
+          $or: [{ threads: id }, { reposts: id }, { replies: id }],
+        },
+        {
+          $pull: {
+            threads: id,
+            reposts: id,
+            replies: id,
+          },
+        },
+        { new: true }
+      );
+
+      // finally delete post
+
+      await Post.findByIdAndDelete(id);
+
+      res
+        .status(200)
+        .json({ success: true, message: "Post deleted successfully...." });
     } catch (error) {
       console.log("ERROR in delete post", error);
-      return res
-        .status(500)
-        .json({
-          success: false,
-          message: "Error in delete post",
-          error: error,
-        });
+      return res.status(500).json({
+        success: false,
+        message: "Error in delete post",
+        error: error,
+      });
     }
   };
 }
