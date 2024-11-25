@@ -12,6 +12,9 @@ const postSchema = new mongoose.Schema(
     media: {
       type: String,
     },
+    public_id: {
+      type: String,
+    },
     comment: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     like: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },

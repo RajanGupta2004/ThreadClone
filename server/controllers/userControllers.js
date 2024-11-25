@@ -366,6 +366,18 @@ class userControllers {
       });
     }
   };
+
+  static myInfo = async (req, res) => {
+    try {
+      res.status(200).json({ me: req.user });
+    } catch (error) {
+      return res.status(500).json({
+        success: "false ",
+        message: "Error to get myInfo",
+        error: error,
+      });
+    }
+  };
 }
 
 export default userControllers;
