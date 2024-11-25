@@ -19,5 +19,6 @@ router.get("/me", auth, userControllers.myInfo);
 router.post("/post", auth, postControllers.addPost);
 router.get("/post", auth, postControllers.allPost);
 router.delete("/post/:id", auth, postControllers.deletePost);
+router.put("/post/like/:id", auth, postControllers.likePost);
 
 export default router;

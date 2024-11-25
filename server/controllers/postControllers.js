@@ -201,6 +201,48 @@ class postControllers {
       });
     }
   };
+
+  static likePost = async (req, res) => {
+    try {
+      const { id } = req.params;
+      if (!id) {
+        return res.status(400)({ message: "Post Id is required" });
+      }
+
+      // find post exist or not
+      const postExist = await Post.findById(id);
+      if (!postExist) {
+        return res
+          .status(400)
+          .json({ success: false, message: "post doest not exist" });
+      }
+
+      if (postExist.like.includes(req.user._id)) {
+        await Post.findByIdAndUpdate(postExist._id, {
+          $pull: { like: req.user._id },
+        });
+
+        return res
+          .status(201)
+          .json({ success: false, message: "Unliked post" });
+      }
+
+      await Post.findByIdAndUpdate(
+        postExist._id,
+        {
+          $push: { like: req.user._id },
+        },
+        { new: true }
+      );
+
+      return res.status(200).json({ success: true, message: "liked post" });
+    } catch (error) {
+      console.log("Error in like post API", error);
+      return res
+        .status(500)
+        .json({ success: false, message: "Unable to like post", error: error });
+    }
+  };
 }
 
 export default postControllers;
