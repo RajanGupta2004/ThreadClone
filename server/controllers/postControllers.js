@@ -2,7 +2,7 @@ import formidable from "formidable";
 import Post from "../models/post.model.js";
 import cloudinary from "../config/cloudinary.js";
 import User from "../models/user.Model.js";
-import { model } from "mongoose";
+import mongoose, { model } from "mongoose";
 import Comment from "../models/comment.Model.js";
 
 class postControllers {
@@ -241,6 +241,53 @@ class postControllers {
       return res
         .status(500)
         .json({ success: false, message: "Unable to like post", error: error });
+    }
+  };
+
+  static repostPost = async (req, res) => {
+    try {
+      const { id } = req.params;
+      if (!id) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Id is required" });
+      }
+
+      // find post exist or not
+      const postExist = await Post.findById(id);
+      if (!postExist) {
+        return res
+          .status(404)
+          .json({ success: "false", message: "No such post found..." });
+      }
+
+      // convert the post Id  string into mongoose object id
+      const newId = new mongoose.Types.ObjectId(id);
+      // check the post already posted or not
+      if (req.user.reposts.includes(newId)) {
+        return res
+          .status(400)
+          .json({ success: false, message: "post already reposted....." });
+      }
+
+      await User.findByIdAndUpdate(
+        req.user._id,
+        {
+          $push: { reposts: postExist._id },
+        },
+        { new: true }
+      );
+
+      return res
+        .status(200)
+        .json({ success: true, message: "post reposted successfully...." });
+    } catch (error) {
+      console.log("Error in repost");
+      return res.status(500).json({
+        success: false,
+        message: "Error in repost routes",
+        error: error,
+      });
     }
   };
 }
