@@ -114,16 +114,13 @@ class postControllers {
         .populate({ path: "like" })
         .populate({
           path: "comment",
-          populate: {
-            path: "admin",
-            model: "user",
-          },
         });
 
       res
         .status(200)
         .json({ success: true, message: "all post ", posts: posts });
     } catch (error) {
+      console.log("ERROR to get all post", error);
       return res.status(500).json({
         success: false,
         message: "Error in to get all post",
