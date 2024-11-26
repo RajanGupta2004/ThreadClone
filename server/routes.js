@@ -2,8 +2,11 @@ import express from "express";
 import userControllers from "./controllers/userControllers.js";
 import auth from "./middleware/auth.js";
 import postControllers from "./controllers/postControllers.js";
+import commentControllers from "./controllers/commentControllers.js";
 
 const router = express.Router();
+
+// user routes
 
 router.post("/sign-in", userControllers.signIn);
 router.post("/login", userControllers.login);
@@ -22,5 +25,9 @@ router.delete("/post/:id", auth, postControllers.deletePost);
 router.put("/post/like/:id", auth, postControllers.likePost);
 router.put("/repost/:id", auth, postControllers.repostPost);
 router.get("/singlepost/:id", auth, postControllers.singlePost);
+
+// comments routes
+
+router.post("/comment/:id", auth, commentControllers.addComments);
 
 export default router;
