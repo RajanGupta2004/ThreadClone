@@ -21,5 +21,6 @@ router.get("/post", auth, postControllers.allPost);
 router.delete("/post/:id", auth, postControllers.deletePost);
 router.put("/post/like/:id", auth, postControllers.likePost);
 router.put("/repost/:id", auth, postControllers.repostPost);
+router.get("/singlepost/:id", auth, postControllers.singlePost);
 
 export default router;

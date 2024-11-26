@@ -2,7 +2,7 @@ import formidable from "formidable";
 import Post from "../models/post.model.js";
 import cloudinary from "../config/cloudinary.js";
 import User from "../models/user.Model.js";
-import mongoose, { model } from "mongoose";
+import mongoose from "mongoose";
 import Comment from "../models/comment.Model.js";
 
 class postControllers {
@@ -286,7 +286,56 @@ class postControllers {
       return res.status(500).json({
         success: false,
         message: "Error in repost routes",
-        error: error,
+        error: error.message,
+      });
+    }
+  };
+
+  static singlePost = async (req, res) => {
+    try {
+      const { id } = req.params;
+      if (!id) {
+        return res
+          .status(400)
+          .json({ success: false, message: "post is id required" });
+      }
+
+      // find post exist or not
+
+      const postExist = await Post.findById(id)
+        .populate({
+          path: "admin",
+          select: "-password",
+        })
+        .populate({
+          path: "like",
+          select: "-password",
+          populate: {
+            path: "reposts",
+          },
+        })
+        .populate({
+          path: "comment",
+          populate: {
+            path: "admin",
+          },
+        });
+      if (!postExist) {
+        return res
+          .status(404)
+          .json({ success: false, message: "such post does not exist..." });
+      }
+      res.status(200).json({
+        success: true,
+        message: "single post data fetch successfully...",
+        singlePost: postExist,
+      });
+    } catch (error) {
+      console.log("ERROR in get single post");
+      return res.status(500).json({
+        success: false,
+        message: "Error in to get single post",
+        error: error.message,
       });
     }
   };
