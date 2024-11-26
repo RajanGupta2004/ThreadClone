@@ -29,5 +29,6 @@ router.get("/singlepost/:id", auth, postControllers.singlePost);
 // comments routes
 
 router.post("/comment/:id", auth, commentControllers.addComments);
+router.delete("/comment/:postId/:id", auth, commentControllers.deleteComment);
 
 export default router;

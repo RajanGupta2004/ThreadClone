@@ -23,6 +23,10 @@ const auth = async (req, res, next) => {
     // console.log(decodedToken);
 
     const user = await User.findById(decodedToken.token);
+    // .populate("followers")
+    // .populate("threads")
+    // .populate("replies")
+    // .populate("reposts");
     if (!user) {
       return res
         .status(400)
