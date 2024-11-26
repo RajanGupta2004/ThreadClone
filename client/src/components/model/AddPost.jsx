@@ -12,8 +12,12 @@ import {
 import React, { useRef, useState } from "react";
 import { FaImages } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
+import { useDispatch, useSelector } from "react-redux";
+import { openAddToPost } from "../../redux/slice";
 
 const AddPost = () => {
+  const dispatch = useDispatch();
+  const { openAddPostModel } = useSelector((state) => state.service);
   const mediaRef = useRef();
   const [media, setMedia] = useState("");
   const [text, setText] = useState("");
@@ -26,16 +30,18 @@ const AddPost = () => {
     mediaRef.current.click();
   };
 
-  const handleClose = () => {};
+  const handleClose = () => {
+    dispatch(openAddToPost(false));
+  };
   return (
     <Dialog
-      open={true}
+      open={openAddPostModel}
       onClose={handleClose}
       fullWidth
       fullScreen={_700 ? false : true}
     >
       <Box position={"absolute"} top={12} right={5}>
-        <RxCross2 size={28} className="image-icon" />
+        <RxCross2 size={28} className="image-icon" onClick={handleClose} />
       </Box>
       <DialogTitle textAlign={"center"}>create a new thred</DialogTitle>
 

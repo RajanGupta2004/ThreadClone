@@ -17,7 +17,7 @@ const ProtectedLayout = () => {
       mx={"auto"}
     >
       <Header />
-      {/* <AddPost /> */}
+      <AddPost />
       {/* <EditPost /> */}
       {/* <MainMenu /> */}
       <Outlet />
