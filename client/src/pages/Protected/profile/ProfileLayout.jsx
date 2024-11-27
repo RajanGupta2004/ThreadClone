@@ -8,12 +8,19 @@ import {
 } from "@mui/material";
 import React from "react";
 import { FaInstagram } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 import { Link, Outlet } from "react-router-dom";
+import { openEditProfile } from "../../../redux/slice";
 
 const ProfileLayout = () => {
+  const dispatch = useDispatch();
   const _300 = useMediaQuery("(min-width:300px)");
   const _500 = useMediaQuery("(min-width:500px)");
   const _700 = useMediaQuery("(min-width:700px)");
+
+  const handleOpenEditModel = () => {
+    dispatch(openEditProfile(true));
+  };
   return (
     <>
       <Stack
@@ -74,6 +81,7 @@ const ProfileLayout = () => {
         </Stack>
       </Stack>
       <Button
+        onClick={handleOpenEditModel}
         sx={{
           border: "1px solid gray",
           color: "black",

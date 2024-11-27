@@ -10,12 +10,23 @@ import {
 } from "@mui/material";
 import React from "react";
 import { RxCross2 } from "react-icons/rx";
+import { useDispatch, useSelector } from "react-redux";
+import { openEditProfile } from "../../redux/slice";
 
 const EditPost = () => {
-  const handleClose = () => {};
+  const dispatch = useDispatch();
+  const { openEditProfileModel } = useSelector((state) => state.service);
+  const handleClose = () => {
+    dispatch(openEditProfile(false));
+  };
   return (
-    <Dialog open={true} onClose={handleClose} fullWidth fullScreen={false}>
-      <Box position={"absolute"} top={20} right={20}>
+    <Dialog
+      open={openEditProfileModel}
+      onClose={handleClose}
+      fullWidth
+      fullScreen={false}
+    >
+      <Box position={"absolute"} top={20} right={20} onClick={handleClose}>
         <RxCross2 size={28} className="image-icon" />
       </Box>
       <DialogTitle textAlign={"center"}>Edit post...</DialogTitle>

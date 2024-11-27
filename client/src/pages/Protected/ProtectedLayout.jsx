@@ -5,6 +5,7 @@ import Header from "../../components/common/Header";
 import AddPost from "../../components/model/AddPost";
 import EditPost from "../../components/model/EditPost";
 import MainMenu from "../../components/menu/MainMenu";
+import MyMenu from "../../components/menu/MyMenu";
 
 const ProtectedLayout = () => {
   const _700 = useMediaQuery("(min-width:700px)");
@@ -18,8 +19,9 @@ const ProtectedLayout = () => {
     >
       <Header />
       <AddPost />
-      {/* <EditPost /> */}
-      {/* <MainMenu /> */}
+      <EditPost />
+      <MainMenu />
+      <MyMenu />
       <Outlet />
     </Stack>
   );

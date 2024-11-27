@@ -2,9 +2,17 @@ import React from "react";
 import { Grid2, Stack, useMediaQuery } from "@mui/material";
 import Navbar from "./Navbar";
 import { IoMenu } from "react-icons/io5";
+import { useDispatch } from "react-redux";
+import { toggleMainMenu } from "../../redux/slice";
 
 const Header = () => {
+  const dispatch = useDispatch();
   const _700 = useMediaQuery("(min-width:700px)");
+
+  const handleToggleMainMenu = (e) => {
+    // console.log(e.currentTarget);
+    dispatch(toggleMainMenu(e.currentTarget));
+  };
   return (
     <>
       {_700 ? (
@@ -22,7 +30,11 @@ const Header = () => {
           >
             <Navbar />
           </Stack>
-          <IoMenu size={32} className="image-icon" />
+          <IoMenu
+            size={32}
+            className="image-icon"
+            onClick={handleToggleMainMenu}
+          />
         </Stack>
       ) : (
         <>

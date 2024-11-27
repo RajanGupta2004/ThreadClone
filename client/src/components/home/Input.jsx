@@ -6,11 +6,18 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { openAddToPost } from "../../redux/slice";
 
 const Input = () => {
+  const dispatch = useDispatch();
   const _300 = useMediaQuery("(min-width:300px)");
   const _500 = useMediaQuery("(min-width:500px)");
   const _700 = useMediaQuery("(min-width:700px)");
+
+  const handleAppPost = () => {
+    dispatch(openAddToPost(true));
+  };
   return (
     <>
       {_700 ? (
@@ -24,6 +31,7 @@ const Input = () => {
           borderBottom={"2px solid gray"}
           my={3}
           mx={"auto"}
+          onClick={handleAppPost}
         >
           <Stack
             flexDirection={"row"}
