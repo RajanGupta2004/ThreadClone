@@ -6,13 +6,18 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { IoIosMore } from "react-icons/io";
 
 const Comments = () => {
+  const [anchorEl3, setanchorEl3] = useState(null);
+
   const _300 = useMediaQuery("(min-width:300px)");
   const _700 = useMediaQuery("(min-width:700px)");
-  const handleClose = () => {};
+
+  const handleClose = () => {
+    setanchorEl3(null);
+  };
   return (
     <Stack
       flexDirection={"column"}
@@ -52,12 +57,12 @@ const Comments = () => {
           <Typography variant="subtitle" fontSize={"1rem"}>
             24 min
           </Typography>
-          <IoIosMore size={32} />
+          <IoIosMore size={32} onClick={(e) => setanchorEl3(e.currentTarget)} />
         </Stack>
       </Stack>
       <Menu
-        open={true}
-        anchorEl={""}
+        open={anchorEl3 ? true : false}
+        anchorEl={anchorEl3}
         onClose={handleClose}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}

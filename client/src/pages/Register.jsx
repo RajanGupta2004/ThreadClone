@@ -5,7 +5,8 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useLoginMutation, useSigninMutation } from "../redux/service";
 
 const Register = () => {
   const [login, setLogin] = useState(false);
@@ -14,25 +15,40 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const _700 = useMediaQuery("(min-width:700px)");
 
+  const [signinUser, signUserData] = useSigninMutation();
+  const [loginUser, loginUserData] = useLoginMutation();
+
   const toggleLogin = () => {
     setLogin((pre) => !pre);
   };
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     const data = {
       userName,
       email,
       password,
     };
-    console.log(data);
+    // console.log(data);
+    await signinUser(data);
   };
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const data = {
       email,
       password,
     };
-    console.log(data);
+    // console.log(data);
+    await loginUser(data);
   };
+
+  useEffect(() => {
+    if (signUserData.isSuccess) {
+      console.log(signUserData.data);
+    }
+    if (loginUserData.isSuccess) {
+      console.log(loginUserData.data);
+      window.location.reload();
+    }
+  }, [signUserData.isSuccess, loginUserData.isSuccess]);
   return (
     <>
       <Stack

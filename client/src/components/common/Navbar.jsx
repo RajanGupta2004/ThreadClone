@@ -32,7 +32,7 @@ const Navbar = () => {
 
         <CiHeart size={32} />
         <TbEdit size={32} onClick={handleAddPost} />
-        <Link to={"/profile"}>
+        <Link to={"/profile/threads/1"}>
           <RxAvatar size={32} />
         </Link>
       </Stack>
