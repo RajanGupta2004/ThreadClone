@@ -7,6 +7,10 @@ const initialState = {
   anchorEl2: null,
   darkMode: false,
   myInfo: null,
+  user: {},
+  allPost: [],
+  postId: null,
+  searchedUser: [],
 };
 
 const serviceSlice = createSlice({
@@ -35,6 +39,34 @@ const serviceSlice = createSlice({
     addMyInfo: (state, action) => {
       state.myInfo = action.payload;
     },
+
+    addUser: (state, action) => {
+      state.user = action.payload;
+    },
+
+    addSingle: (state, action) => {
+      const newArr = [...state.allPost];
+      const updatedArr = [...action.payload.post, ...newArr];
+      state.allPost = updatedArr;
+    },
+
+    addToAllPost: (state, action) => {
+      // log to all post
+    },
+
+    deleteThePost: (state, action) => {
+      const postArr = [...state.allPost];
+      const newArr = postArr.filter((e) => e.id === state.postId);
+      state.allPost = newArr;
+    },
+
+    addToSearchUser: (state, action) => {
+      state.searchedUser = action.payload;
+    },
+
+    addPostId: (state, action) => {
+      state.postId = action.payload;
+    },
   },
 });
 
@@ -45,5 +77,11 @@ export const {
   toggleMyMenu,
   toggleColorMode,
   addMyInfo,
+  addUser,
+  addSingle,
+  addToAllPost,
+  deleteThePost,
+  addToSearchUser,
+  addPostId,
 } = serviceSlice.actions;
 export default serviceSlice.reducer;
