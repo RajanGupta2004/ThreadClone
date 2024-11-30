@@ -193,4 +193,5 @@ export const {
   useAddCommentMutation,
   useDeleteCommentMutation,
   useUpdateProfileMutation,
+  useAllPostQuery,
 } = serviceApi;

@@ -51,7 +51,23 @@ const serviceSlice = createSlice({
     },
 
     addToAllPost: (state, action) => {
-      // log to all post
+      const newPostArr = [...action.payload.posts];
+      if (state.allPost.length === 0) {
+        state.allPost = newPostArr;
+        return;
+      }
+      const existingPosts = [...state.allPost];
+      newPostArr.forEach((e) => {
+        const existingIndex = existingPosts.findIndex((i) => {
+          return i._id === e._id;
+        });
+        if (existingIndex !== -1) {
+          existingPosts[existingIndex] = e;
+        } else {
+          existingPosts.push(e);
+        }
+      });
+      state.allPost = existingPosts;
     },
 
     deleteThePost: (state, action) => {
