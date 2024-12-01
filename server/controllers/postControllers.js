@@ -116,6 +116,8 @@ class postControllers {
           path: "comment",
         });
 
+      console.log(posts);
+
       res
         .status(200)
         .json({ success: true, message: "all post ", posts: posts });

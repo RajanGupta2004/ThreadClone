@@ -9,9 +9,7 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [show, setShow] = useState(true);
   const { allPost } = useSelector((state) => state.service);
-  console.log("allPost", allPost);
   const { data, isLoading } = useAllPostQuery(page);
-  // console.log(data);
 
   useEffect(() => {
     if (data?.posts.length < 3) {
@@ -37,7 +35,7 @@ const Home = () => {
       <Stack flexDirection={"column"} gap={2} mb={10}>
         {allPost ? (
           allPost.length > 0 ? (
-            allPost.map((e) => <Post key={e._id} />)
+            allPost.map((e) => <Post key={e._id} e={e} />)
           ) : (
             <Typography>No post available....</Typography>
           )

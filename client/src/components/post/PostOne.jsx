@@ -1,36 +1,40 @@
 import { Avatar, AvatarGroup, Badge, Stack, Stepper } from "@mui/material";
 import React from "react";
+import { Link } from "react-router-dom";
 
-const PostOne = () => {
+const PostOne = ({ e }) => {
+  // console.log("first", e);
   return (
     <Stack
       flexDirection={"column"}
       alignItems={"center"}
       justifyContent={"space-between"}
     >
-      <Badge
-        overlap="circular"
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        badgeContent={
-          <Avatar
-            src=""
-            alt="+"
-            sx={{
-              backgroundColor: "green",
-              width: "20px",
-              height: "20px",
-              cursor: "pointer",
-            }}
-          >
-            +
-          </Avatar>
-        }
-      >
-        <Avatar src="" alt="+" />
-      </Badge>
+      <Link to={`/profile/threads/${e?.admin._id}`}>
+        <Badge
+          overlap="circular"
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          badgeContent={
+            <Avatar
+              src=""
+              alt="+"
+              sx={{
+                backgroundColor: "green",
+                width: "20px",
+                height: "20px",
+                cursor: "pointer",
+              }}
+            >
+              +
+            </Avatar>
+          }
+        >
+          <Avatar src="" alt="+" />
+        </Badge>
+      </Link>
 
       <Stack
         flexDirection={"column"}
@@ -49,18 +53,37 @@ const PostOne = () => {
         ></Stepper>
       </Stack>
 
-      <AvatarGroup
-        total={4}
-        sx={{
-          "& .MuiAvatar-root": {
-            width: 24,
-            height: 24,
-            fontSize: "12px",
-          },
-        }}
-      >
-        <Avatar src="" alt="" />
-      </AvatarGroup>
+      {e ? (
+        e.comment.length > 0 ? (
+          <AvatarGroup
+            total={e.comment.length}
+            sx={{
+              "& .MuiAvatar-root": {
+                width: 24,
+                height: 24,
+                fontSize: "12px",
+              },
+            }}
+          >
+            <Avatar
+              src={e.comment[0].admin.profilePic}
+              alt={e.comment[0].admin.userName}
+            />
+            {e.comment.length > 1 ? (
+              <Avatar
+                src={e.comment[1].admin.profilePic}
+                alt={e.comment[1].admin.userName}
+              />
+            ) : (
+              ""
+            )}
+          </AvatarGroup>
+        ) : (
+          ""
+        )
+      ) : (
+        ""
+      )}
     </Stack>
   );
 };
