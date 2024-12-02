@@ -22,7 +22,7 @@ const Post = ({ e }) => {
   };
 
   const checkIsAdmin = () => {
-    if (myInfo.me == e?.admin?._id) {
+    if (myInfo.me._id == e?.admin?._id) {
       setIsAdmin(true);
       return;
     }
@@ -30,7 +30,7 @@ const Post = ({ e }) => {
   };
 
   useEffect(() => {
-    if (e && myInfo) {
+    if (e && myInfo.me) {
       checkIsAdmin();
     }
   }, [myInfo, e]);

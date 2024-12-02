@@ -15,7 +15,7 @@ const Home = () => {
     if (data?.posts.length < 3) {
       setShow(false);
     }
-  }, [data]);
+  }, [allPost, data]);
 
   if (isLoading) {
     return (

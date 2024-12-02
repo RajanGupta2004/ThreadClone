@@ -6,10 +6,13 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openAddToPost } from "../../redux/slice";
 
 const Input = () => {
+  const { myInfo } = useSelector((state) => state.service);
+  // console.log(myInfo.me);
+
   const dispatch = useDispatch();
   const _300 = useMediaQuery("(min-width:300px)");
   const _500 = useMediaQuery("(min-width:500px)");
@@ -39,7 +42,7 @@ const Input = () => {
             justifyContent={"space-between"}
             gap={2}
           >
-            <Avatar />
+            <Avatar src={myInfo.me.profilePic} />
             <Typography variant="h5" fontSize={20} color="gray">
               Start a thred...
             </Typography>

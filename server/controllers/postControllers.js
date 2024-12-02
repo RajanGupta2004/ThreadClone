@@ -116,7 +116,7 @@ class postControllers {
           path: "comment",
         });
 
-      console.log(posts);
+      // console.log(posts);
 
       res
         .status(200)
@@ -150,7 +150,7 @@ class postControllers {
       const userId = req.user._id.toString();
       const adminId = postExist.admin.toString();
 
-      console.log("userId and post admin", userId, adminId);
+      // console.log("userId and post admin", userId, adminId);
       if (userId != adminId) {
         return res.status(400).json({
           success: false,

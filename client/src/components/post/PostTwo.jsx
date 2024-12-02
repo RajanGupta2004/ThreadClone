@@ -8,9 +8,9 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const PostTwo = ({ e }) => {
-  console.log("data", e);
+  // console.log("data", e.like);
   const { myInfo } = useSelector((state) => state.service);
-  const [likePost] = useLikePostMutation();
+  const [likePost, likePostData] = useLikePostMutation();
 
   const [isLiked, setIsLiked] = useState();
   const _300 = useMediaQuery("(min-width:300px)");
@@ -35,6 +35,7 @@ const PostTwo = ({ e }) => {
       }
       setIsLiked(false);
     };
+
     checkIsLiked();
   }, [e]);
   return (

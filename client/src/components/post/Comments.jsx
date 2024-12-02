@@ -6,18 +6,64 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoIosMore } from "react-icons/io";
+import {
+  useDeleteCommentMutation,
+  useSinglePostQuery,
+} from "../../redux/service";
+import { useSelector } from "react-redux";
 
-const Comments = () => {
+const Comments = ({ e, postId }) => {
+  const { myInfo } = useSelector((state) => state.service);
+  const { refetch } = useSinglePostQuery(postId);
+  const [deleteComment, deleteCommentData] = useDeleteCommentMutation();
+  const [isAdmin, setIsAdmin] = useState();
   const [anchorEl3, setanchorEl3] = useState(null);
 
   const _300 = useMediaQuery("(min-width:300px)");
   const _700 = useMediaQuery("(min-width:700px)");
 
+  // console.log("myinfo", myInfo);
+
   const handleClose = () => {
     setanchorEl3(null);
   };
+
+  const handleDeleteComment = async () => {
+    const info = {
+      id: e?._id,
+      postId,
+    };
+
+    await deleteComment(info);
+    handleClose();
+    refetch();
+  };
+
+  const checkIsAdmin = () => {
+    if (e && myInfo) {
+      if (e.admin._id === myInfo.me._id) {
+        setIsAdmin(true);
+        return;
+      }
+    }
+    setIsAdmin(false);
+  };
+
+  useEffect(() => {
+    checkIsAdmin();
+  }, []);
+
+  useEffect(() => {
+    if (deleteCommentData.isSuccess) {
+      console.log(deleteCommentData.data);
+    }
+
+    if (deleteCommentData.isError) {
+      console.log(deleteComment.error.data);
+    }
+  }, [deleteCommentData.isSuccess, deleteCommentData.isError]);
   return (
     <Stack
       flexDirection={"column"}
@@ -38,17 +84,17 @@ const Comments = () => {
         }
       >
         <Stack flexDirection={"row"} gap={1} alignItems={"center"}>
-          <Avatar src="" alt="" />
+          <Avatar src={e?.admin.profilePic} alt={e?.admin.userName} />
           <Stack flexDirection={"column"}>
             <Typography
               variant="h6"
               fontSize={_300 ? "1rem" : "0.9rem"}
               fontWeight={"bold"}
             >
-              rajan_2004@
+              {e?.admin.userName}
             </Typography>
             <Typography variant="subtitle2" fontSize={"0.9rem"}>
-              This is comments on post
+              {e?.text}
             </Typography>
           </Stack>
         </Stack>
@@ -57,7 +103,17 @@ const Comments = () => {
           <Typography variant="subtitle" fontSize={"1rem"}>
             24 min
           </Typography>
-          <IoIosMore size={32} onClick={(e) => setanchorEl3(e.currentTarget)} />
+          {isAdmin ? (
+            <IoIosMore
+              size={32}
+              onClick={(e) => setanchorEl3(e.currentTarget)}
+            />
+          ) : (
+            <IoIosMore
+              size={32}
+              onClick={(e) => setanchorEl3(e.currentTarget)}
+            />
+          )}
         </Stack>
       </Stack>
       <Menu
@@ -67,7 +123,7 @@ const Comments = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem>Delete</MenuItem>
+        <MenuItem onClick={handleDeleteComment}>Delete</MenuItem>
       </Menu>
     </Stack>
   );

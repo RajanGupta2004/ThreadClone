@@ -122,6 +122,15 @@ export const serviceApi = createApi({
         method: "GET",
       }),
 
+      providesTags: (result) => {
+        return result
+          ? [
+              ...result.posts.map(({ _id }) => ({ type: "Post", id: _id })),
+              { type: "Post", id: "LIST" },
+            ]
+          : [{ type: "Post", id: "LIST" }];
+      },
+
       async onQueryStarted(params, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
@@ -165,7 +174,7 @@ export const serviceApi = createApi({
     addComment: builder.mutation({
       query: ({ id, ...data }) => ({
         url: `comment/${id}`,
-        method: "PUT",
+        method: "POST",
         body: data,
       }),
     }),
